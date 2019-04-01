@@ -1,0 +1,15 @@
+{ "columns":50,
+ "image":"spritesheet.png",
+ "imageheight":1280,
+ "imagewidth":800,
+ "margin":0,
+ "name":"Tileset",
+ "spacing":0,
+ "tilecount":4000,
+ "tiledversion":"1.2.3",
+ "tileheight":16,
+ "tilewidth":16,
+ "transparentcolor":"#5a5268",
+ "type":"tileset",
+ "version":1.2
+}
