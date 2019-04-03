@@ -12,7 +12,7 @@ var BootScene = new Phaser.Class({
     preload: function ()
     {
         // map tiles
-        this.load.image('tiles', 'assets/map/spritesheet.png');
+        this.load.image('tiles', 'assets/map/RPGTileset.png');
         
         // map in json format
         this.load.tilemapTiledJSON('map', 'assets/map/map.json');
@@ -21,6 +21,7 @@ var BootScene = new Phaser.Class({
         this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
 
         this.load.spritesheet('enemy', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('fireball', 'assets/fireball.png', { frameWidth: 16, frameHeight: 16 });
 
     },
  
@@ -50,7 +51,7 @@ var WorldScene = new Phaser.Class({
     {
         var map = this.make.tilemap({ key: 'map' });
         
-        var tiles = map.addTilesetImage('Tileset', 'tiles');
+        var tiles = map.addTilesetImage('RPGTileset', 'tiles');
         
 	var grass = map.createStaticLayer('Background', tiles, 0, 0);
         var obstacles = map.createStaticLayer('Blocked', tiles, 0, 0);
@@ -122,12 +123,21 @@ var WorldScene = new Phaser.Class({
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'exist',
+            frames: this.anims.generateFrameNumbers('fireball', { frames: [ 0, 1 ] }),
+            frameRate: 10,
+            repeat: -1
+        });
+
         this.physics.add.collider(this.player, obstacles);
             
         this.enemy = this.physics.add.sprite(50, 50, 'enemy', 1);
+        
+        
 
              
-        this.physics.add.overlap(this.player, this.spawns, this.onMeetEnemy, false, this);
+        this.physics.add.overlap(this.player, this.enemy, this.onMeetEnemy, false, this);
 
         
         
@@ -136,8 +146,7 @@ var WorldScene = new Phaser.Class({
 
     onMeetEnemy: function(player, zone) {        
         // we move the zone to some other location
-        zone.x = Phaser.Math.RND.between(0, this.physics.world.bounds.width);
-        zone.y = Phaser.Math.RND.between(0, this.physics.world.bounds.height);       
+              
  
         // start battle 
     },
@@ -169,6 +178,14 @@ var WorldScene = new Phaser.Class({
             this.player.body.setVelocityY(80);
         }    
 
+        spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        if (Phaser.Input.Keyboard.JustDown(spacebar))
+        {
+            this.fireball = this.physics.add.sprite(this.player.x, this.player.y, 'fireball', 1);
+            this.fireball.setVelocityY(-50);
+            
+        }
+        
         
         
         //animation
@@ -208,7 +225,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: false
         }
     },
     scene: [
