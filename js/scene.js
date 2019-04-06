@@ -1,5 +1,5 @@
 import Player from "./player.js"
-import Scene2 from "./scene2.js";
+
 
 export default class Scene extends Phaser.Scene {
     constructor() {
@@ -18,6 +18,7 @@ export default class Scene extends Phaser.Scene {
 
         this.load.spritesheet('enemy', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('fireball', 'assets/fireball.png', { frameWidth: 16, frameHeight: 16 });
+        this.load.spritesheet('door', 'assets/PurpleDoor.png', { frameWidth: 16, frameHeight: 16 });
 
     }
  
@@ -32,7 +33,7 @@ export default class Scene extends Phaser.Scene {
         obstacles.setCollisionByExclusion([-1]);
         
         this.player = new Player(this,50,50);
-        this.door = this.physics.add.sprite(50, 100, 'fireball', 0)
+        this.door = this.physics.add.sprite(50, 100, 'door', 0)
 
         this.physics.world.bounds.width = map.widthInPixels;
         this.physics.world.bounds.height = map.heightInPixels;
