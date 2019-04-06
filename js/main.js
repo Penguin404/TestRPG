@@ -1,4 +1,5 @@
 import Scene from "./scene.js"
+import Scene2 from "./scene2.js";
  
 var config = {
     type: Phaser.AUTO,
@@ -15,7 +16,8 @@ var config = {
         }
     },
     scene: [
-        Scene
+        Scene,
+        Scene2
     ]
 };
 var game = new Phaser.Game(config);

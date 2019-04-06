@@ -1,4 +1,4 @@
-import Scene from "./scene.js"
+
 
 
 export default class Player {
@@ -87,7 +87,7 @@ export default class Player {
         }    
         
 
-        if (keys.spacebar.isDown || Phaser.Input.Keyboard.JustDown(keys.x))
+        if (Phaser.Input.Keyboard.JustDown(keys.x))
         {
             this.scene.addFireball()
         }
