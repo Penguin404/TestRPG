@@ -1,9 +1,12 @@
-export default class Player {
+export default class BattlePlayer {
     constructor(scene, x, y){
         
         this.scene = scene;
         this.anims = scene.anims;
         this.sprite = scene.physics.add.sprite(x, y, 'player', 0)
+        .setDrag(1000, 0)
+        .setMaxVelocity(300, 400);
+        this.sprite.body.setGravityY(300);
         this.sprite.setCollideWorldBounds(true);
         
         const { LEFT, RIGHT, UP, DOWN, W, A, S, D, X, SPACEBAR } = Phaser.Input.Keyboard.KeyCodes;
@@ -57,37 +60,47 @@ export default class Player {
     
     update(time, delta)
     {
+        const onGround = this.sprite.body.blocked.down;
+        const onWallLeft = this.sprite.body.blocked.left;
+        const onWallRight = this.sprite.body.blocked.right;
         const keys = this.keys;
-        this.sprite.body.setVelocity(0);
+        const acceleration = onGround ? 300 : 200;
+        
         
         // Horizontal movement
         if (keys.left.isDown)
         {
-            this.sprite.body.setVelocityX(-80);
+            this.sprite.body.setAccelerationX(-acceleration);
             
         }
         else if (keys.right.isDown)
         {
-            this.sprite.body.setVelocityX(80);
-        } 
-        this.sprite.body.velocity.normalize().scale(80);
+            this.sprite.body.setAccelerationX(acceleration);
+        } else{
+            
+            this.sprite.body.setAccelerationX(0);
+        }
+        
  
         // Vertical movement
-        if (keys.up.isDown)
+        if (keys.up.isDown && onGround)
         {
-            this.sprite.body.setVelocityY(-80);
-        }
-        else if (keys.down.isDown)
+            this.sprite.body.setVelocityY(-250);
+        }else if (Phaser.Input.Keyboard.JustDown(keys.up) && (onWallLeft || onWallRight))
         {
-            this.sprite.body.setVelocityY(80);
-            
-        }    
-        
+            if(onWallRight){
+                this.sprite.body.setVelocityY(-100);
+                this.sprite.body.setVelocityX(-acceleration);
 
-        if (Phaser.Input.Keyboard.JustDown(keys.x))
-        {
-            this.scene.addFireball()
+            }
+            if(onWallLeft){
+                this.sprite.body.setVelocityY(-100);
+                this.sprite.body.setVelocityX(acceleration);
+                
+            }
+            
         }
+         
         //animation
         if (keys.left.isDown)
         {
@@ -102,10 +115,6 @@ export default class Player {
         else if (keys.up.isDown)
         {
             this.sprite.anims.play('up', true);
-        }
-        else if (keys.down.isDown)
-        {
-            this.sprite.anims.play('down', true);
         }
         else
         {

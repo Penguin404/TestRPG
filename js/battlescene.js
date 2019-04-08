@@ -1,8 +1,8 @@
-import Player from "./player.js"
+import BattlePlayer from "./battleplayer.js"
 
-export default class Scene2 extends Phaser.Scene {
+export default class BattleScene extends Phaser.Scene {
     constructor() {
-        super("world2");
+        super("battleworld");
       }
     preload()
     {
@@ -10,7 +10,7 @@ export default class Scene2 extends Phaser.Scene {
         this.load.image('tileset', 'assets/map/PurpleTileset.png');
         
         // map in json format
-        this.load.tilemapTiledJSON('overworld', 'assets/map/Overworld.json');
+        this.load.tilemapTiledJSON('battleworld', 'assets/map/Battle.json');
 
         
         
@@ -25,7 +25,7 @@ export default class Scene2 extends Phaser.Scene {
     create()
     {
         
-        var map = this.make.tilemap({ key: 'overworld' });
+        var map = this.make.tilemap({ key: 'battleworld' });
         
         var tiles = map.addTilesetImage('PurpleTileset', 'tileset');
         
@@ -33,8 +33,8 @@ export default class Scene2 extends Phaser.Scene {
         var obstacles = map.createStaticLayer('Blocked', tiles, 0, 0);
         obstacles.setCollisionByExclusion([-1]);
         
-        this.player = new Player(this,50,50);
-        this.enemy = this.physics.add.sprite(200, 200, 'player', 0);
+        this.player = new BattlePlayer(this,70,460);
+        this.enemy = this.physics.add.sprite(100, 100, 'player', 0);
 
         this.physics.world.bounds.width = map.widthInPixels;
         this.physics.world.bounds.height = map.heightInPixels;
@@ -47,19 +47,15 @@ export default class Scene2 extends Phaser.Scene {
         this.physics.add.collider(this.player.sprite, obstacles);
         this.physics.add.overlap(this.player.sprite, this.enemy, this.onMeetEnemy, false, this);
 
+        
 
       
   }
 
-  addFireball()
-  {
-      this.fireball = this.physics.add.sprite(this.player.sprite.x, this.player.sprite.y, 'fireball', 1);
-      this.fireball.setVelocityY(-50);
-      
-  }
+
   onMeetEnemy()
   {
-      this.scene.start('battleworld');
+      
   }
   
 
@@ -67,7 +63,6 @@ export default class Scene2 extends Phaser.Scene {
     {
         
         this.player.update();
-        
         
     }
 }

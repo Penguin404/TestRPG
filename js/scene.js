@@ -1,4 +1,5 @@
 import Player from "./player.js"
+import Sign from "./sign.js";
 
 
 export default class Scene extends Phaser.Scene {
@@ -14,6 +15,7 @@ export default class Scene extends Phaser.Scene {
         this.load.tilemapTiledJSON('map', 'assets/map/map.json');
         
         // our two characters
+        this.load.spritesheet('sign', 'assets/ReadMeSign.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('player', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
 
         this.load.spritesheet('enemy', 'assets/RPG_assets.png', { frameWidth: 16, frameHeight: 16 });
@@ -47,14 +49,7 @@ export default class Scene extends Phaser.Scene {
                          
         this.physics.add.overlap(this.player.sprite, this.door, this.onMeetDoor, false, this);
 
-        this.add.text(250, 1, "Arrow keys\n to move,\n x key \nto shoot \nfireballs.", {
-        font: "10px monospace",
-        fill: "#000000",
-        padding: { x: 5, y: 5 },
-        backgroundColor: "#ffffff"
-        
-      })
-      .setScrollFactor(0);
+        this.sign = new Sign(this, 90, 50, "Use arrow keys to move, and X to shoot fire");
 
       
   }
@@ -77,6 +72,6 @@ export default class Scene extends Phaser.Scene {
     {
         
         this.player.update();
-        
+        this.sign.update();
     }
 }
